@@ -1,0 +1,14 @@
+{
+  "name": "shop-scrapping",
+  "module": "index.js",
+  "type": "module",
+  "devDependencies": {
+    "bun-types": "^0.6.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "puppeteer": "^20.5.0"
+  }
+}
