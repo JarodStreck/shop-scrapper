@@ -5,7 +5,7 @@ let products = [];
 (async () => {
     const browser = await puppeteer.launch({
       executablePath:"/usr/bin/google-chrome",
-      headless:false
+      headless:"new"
     });
     const page = await browser.newPage();
   
@@ -34,8 +34,6 @@ let products = [];
       return prices
   })
 
-    console.log(prices);
-    console.log(names);
     for(let i = 0 ; i < prices.length; i++){
       products.push(
         {
@@ -46,8 +44,9 @@ let products = [];
     }
 
     fs.writeFile("product.json",JSON.stringify(products), ()=>{
-      console.log("Product added to file");
+      console.log( products.length + " products added to file");
     })
 
-    //await browser.close();
+    await browser.close();
   })();
+
