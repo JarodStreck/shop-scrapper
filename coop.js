@@ -62,7 +62,7 @@ import fs from "fs";
     total_product = total_product.concat(products);
     console.log("Finished categorie : " + categories[c] + " " + products.length)
   }
-  fs.writeFile("product.json", JSON.stringify(total_product), () => {
+  fs.writeFile("coop.json", JSON.stringify(total_product), () => {
     console.log(total_product.length +  " products added to file");
   })
 
