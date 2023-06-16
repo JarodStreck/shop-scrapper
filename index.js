@@ -1,11 +1,11 @@
 import puppeteer from 'puppeteer';
 import fs from "fs";
-let products = [];
+
 
 (async () => {
   const browser = await puppeteer.launch({
-    executablePath: "/usr/bin/google-chrome",
-    headless: false
+    executablePath: "C:/Program Files/BraveSoftware/Brave-Browser/Application/brave.exe",
+    headless: "true"
   });
   const page = await browser.newPage();
   await page.setViewport({ width: 1860, height: 1400 });
@@ -13,56 +13,60 @@ let products = [];
   await page.setUserAgent('Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4427.0 Safari/537.36');
 
 
-  await page.goto("https://www.coop.ch/fr/nourriture/fruits-legumes/c/m_0001");
-  let has_next_page = true;
-  do {
+  let base_url = "https://www.coop.ch/fr/nourriture/"
+  let categories = ["fruits-legumes/c/m_0001",
+    "produits-laitiers-oeufs/c/m_0055",
+    "viandes-poissons/c/m_0087",
+    "pains-viennoiseries/c/m_0115",
+    "boissons/c/m_2242",
+    "garde-manger/c/m_0140",
+    "friandises-snacks/c/m_2506",
+    "produits-surgeles/c/m_0202",
+    "plats-cuisines/c/m_9744",
+    "regimes-specifiques/c/Specific_Diets"]
+  let total_product = [];
+  for (let c = 0; c < categories.length; c++) {
+    let has_next_page = true;
+    let products = [];
 
-    let names = await page.evaluateHandle(async () => {
-      let names = []
-      let elems = document.getElementsByClassName("productTile-details__name-value");
-      for await (let elem of elems) {
-        names.push(elem.innerText)
-      }
-      return names
-    })
+    await page.goto(base_url + categories[c])
 
-    let prices = await page.evaluate(async () => {
-      let prices = []
-      let elems = document.getElementsByClassName("productTile__price-value-lead-price");;
+    do {
 
-      for await (let elem of elems) {
-        prices.push(elem.innerText)
-      }
-
-      return prices
-    })
-
-    for (let i = 0; i < prices.length; i++) {
-      products.push(
-        {
-          name: names[i],
-          price: prices[i]
+      await page.waitForSelector('.productTile-details');
+      const current_products = await page.evaluate(async () => {
+        let names = document.getElementsByClassName("productTile-details__name-value");
+        let prices = document.getElementsByClassName("productTile__price-value-lead-price");;
+        let products = []
+        console.log(names);
+        console.log(prices);
+        for (let i = 0; i < names.length; i++) {
+          products.push(
+            {
+              name: names[i] != null ? names[i].innerText : "Placeholder",
+              price: prices[i] != null ? prices[i].innerText : 0
+            }
+          );
         }
-      );
-    }
+        return products
+      })
+      products = products.concat(current_products);
+      const elem = await page.waitForSelector(".pagination__next", { timeout: 8000 }).then(async () => {
+        await page.click('.pagination__next');
+      }).catch(() => {
+        has_next_page = false;
+      });
 
-    let elem = await page.evaluateHandle(() => {
-      return document.querySelector('.pagination__next');
-    })
-    has_next_page = elem.asElement != null
-
-    await elem.click().catch((error) => console.log(error));
-
-    console.log("in while");
-  } while (has_next_page);
-
-
-
-  console.log("after while");
-  fs.writeFile("product.json", JSON.stringify(products), () => {
-    console.log(products.length + " products added to file");
+      console.log("Fetched : " + current_products.length + " products");
+    } while (has_next_page);
+    total_product = total_product.concat(products);
+    console.log("Finished categorie : " + categories[c] + " " + products.length)
+  }
+  fs.writeFile("product.json", JSON.stringify(total_product), () => {
+    console.log(total_product.length +  " products added to file");
   })
 
-  //await browser.close();
+
+  await browser.close();
 })();
 
