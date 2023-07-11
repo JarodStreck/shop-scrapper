@@ -5,7 +5,7 @@ import fs from "fs";
 (async () => {
   const browser = await puppeteer.launch({
     executablePath: "C:/Program Files/BraveSoftware/Brave-Browser/Application/brave.exe",
-    headless: "true"
+    headless: false
   });
   const page = await browser.newPage();
   await page.setViewport({ width: 1860, height: 1400 });
@@ -14,7 +14,8 @@ import fs from "fs";
 
 
   let base_url = "https://www.coop.ch/fr/nourriture/"
-  let categories = ["fruits-legumes/c/m_0001",
+  let categories = [
+    "fruits-legumes/c/m_0001",
     "produits-laitiers-oeufs/c/m_0055",
     "viandes-poissons/c/m_0087",
     "pains-viennoiseries/c/m_0115",

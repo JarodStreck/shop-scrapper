@@ -1,0 +1,30 @@
+{
+    "coop" : {
+        "base_url" : "https://www.coop.ch/fr/nourriture/",
+        "categories" : [
+            "fruits-legumes/c/m_0001",
+            "produits-laitiers-oeufs/c/m_0055",
+            "viandes-poissons/c/m_0087",
+            "pains-viennoiseries/c/m_0115",
+            "boissons/c/m_2242",
+            "garde-manger/c/m_0140",
+            "friandises-snacks/c/m_2506",
+            "produits-surgeles/c/m_0202",
+            "plats-cuisines/c/m_9744"
+        ]
+
+    },
+    "migros" :{
+        "base_url" : "https://www.migros.ch/fr/category",
+        "categories" : [
+            "fruits-legumes",
+            "viandes-poissons",
+            "produits-laitiers-ufs-plats-prep",
+            "boulangerie-patisserie-petit-dej",
+            "pates-condiments-conserves",
+            "snacks-confiseries",
+            "surgeles"
+        ]
+    }
+    
+}
