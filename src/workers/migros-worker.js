@@ -1,12 +1,12 @@
 import {workerData,parentPort} from 'worker_threads';
 import puppeteer from 'puppeteer';
-import fs from "fs";
+
 let products = []
 console.log("URL : "+workerData.base_url);
-console.log("CAT : " +workerData.category);
+console.log("CAT : " +workerData.categories);
 
 
-const run = async () =>{
+const run = async (cat) =>{
     let has_more_product = true;
     const browser = await puppeteer.launch({
         executablePath: "C:/Program Files/BraveSoftware/Brave-Browser/Application/brave.exe",
@@ -17,7 +17,7 @@ const run = async () =>{
     await page.setViewport({ width: 1500, height: 1000 });
 
     await page.setUserAgent('Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4427.0 Safari/537.36');
-    await page.goto(workerData.base_url + "/" + workerData.category)
+    await page.goto(workerData.base_url + "/" + cat)
     page.waitForNavigation();
     while(has_more_product){
         await page.waitForSelector(".mui-button-leshop:not([disabled])",{timeout:10000}).then(async (el)=>{
@@ -27,22 +27,6 @@ const run = async () =>{
         }).catch((error)=>{
             has_more_product = false;
         });
-        
-        // await page.waitForSelector(".mui-button-leshop").then(async (el)=>{
-        //     console.log(el);
-        //     await el.click();
-        //     has_more_product = true;
-        // }).catch((error)=>{
-        //     console.error(error);
-        //     has_more_product = false;
-        // })
-        
-        // const elem = await page.waitForSelector(".btn-view-more-products", { timeout: 8000 }).then(async () => {
-        //     await page.click('.at-focus-indicator.migros-ui-btn.spinner.mui-button.mui-button-leshop.mat-button.mat-button-base');
-        //   }).catch(() => {
-        //     console.log("caught");
-        //     has_more_product = false;
-        //   });
     }
     let actual_products = await page.evaluate(()=>{
         const items = document.getElementsByClassName("product-show-details");
@@ -64,14 +48,14 @@ const run = async () =>{
         return actual_products;
     })
     browser.close();
-    products = products.concat(actual_products);
    
-    return products;
+    return actual_products;
 }
 
-run().then((res)=>{
-    console.log("Finished fetching  " + res.length + " product(s) in " + workerData.category + " category");
-    parentPort.postMessage(res);
-}).catch((error)=>{
-    console.error(error);
-})
+for(let i = 0 ; i < workerData.categories.length ; i++){
+    let prods =  await run(workerData.categories[i]);
+    console.log("Finished fetching  " + prods.length + " product(s) in " + workerData.categories[i] + " category");
+    products = products.concat(prods);
+}
+
+parentPort.postMessage(products);

@@ -11,7 +11,8 @@
             "friandises-snacks/c/m_2506",
             "produits-surgeles/c/m_0202",
             "plats-cuisines/c/m_9744"
-        ]
+        ],
+        "worker" : "coop-worker.js"
 
     },
     "migros" :{
@@ -24,7 +25,25 @@
             "pates-condiments-conserves",
             "snacks-confiseries",
             "surgeles"
-        ]
+        ],
+        "worker" : "migros-worker.js"
+    },
+    "aldi" :{
+        "base_url" : "https://www.aldi-now.ch/fr",
+        "categories" : [
+            "boissons-non-alcoolisées",
+            "boissons-alcoolisées",
+            "pain-&-produits-boulangers",
+            "viande-&-poisson",
+            "déjeuner",
+            "rayon-frais",
+            "produits-laitiers-et-œufs",
+            "fruits-&-légumes",
+            "sucreries-&-snacks",
+            "produits-surgelés",
+            "provisions"
+        ],
+        "worker" : "aldi-worker.js"
     }
     
 }
