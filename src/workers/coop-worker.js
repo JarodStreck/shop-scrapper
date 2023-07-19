@@ -10,10 +10,10 @@ const run = async (cat) => {
   let has_next_page = true;
   const browser = await puppeteer.launch({
     executablePath: "C:/Program Files/BraveSoftware/Brave-Browser/Application/brave.exe",
-    headless: false
+    headless: "new"
   });
   const page = await browser.newPage();
-  await page.setViewport({ width: 1860, height: 1400 });
+  await page.setViewport({ width: 1000, height: 750 });
 
   await page.setUserAgent('Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4427.0 Safari/537.36');
 
@@ -50,6 +50,7 @@ const run = async (cat) => {
   
   return cat_products;
 }
+
 for(let i = 0 ; i < workerData.categories.length ; i++){
   let prods =  await run(workerData.categories[i]).catch(err =>{
     console.log(err);
