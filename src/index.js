@@ -4,7 +4,7 @@ import { Worker } from 'worker_threads';
 const MIN_THREAD = 1;
 const MAX_THREAD = 16;
 const DISABLE_THREAD_SELECTION = true
-const DEFAULT_NB_THREAD = 4;
+const DEFAULT_NB_THREAD = 1;
 const valid_file_regex = new RegExp(/^[0-9a-zA-Z ... ]+$/);
 const config = JSON.parse(fs.readFileSync("../config.json",{encoding:"utf8"}));
 

@@ -44,6 +44,13 @@
             "provisions"
         ],
         "worker" : "aldi-worker.js"
+    },
+    "lidl" : {
+        "base_url" : "https://sortiment.lidl.ch/fr",
+        "categories" : [
+            "alle-kategorien.html"
+        ],
+        "worker" : "lidl-worker.js"
     }
     
 }
